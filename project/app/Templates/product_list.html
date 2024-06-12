@@ -1,0 +1,919 @@
+{% comment %} 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product List</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Filtered Products</h1>
+    
+    <form method="post" action="{% url 'filter_products' %}">
+        {% csrf_token %}
+        
+        <label>
+            Teens:
+            <input type="checkbox" name="teens">
+        </label>
+        <label>
+            Twenties:
+            <input type="checkbox" name="twenties">
+        </label>
+        <label>
+            Thirties:
+            <input type="checkbox" name="thirties">
+        </label>
+        <label>
+            Forties:
+            <input type="checkbox" name="forties">
+        </label>
+        <label>
+            Fifties:
+            <input type="checkbox" name="fifties">
+        </label>
+        <label>
+            Sixties:
+            <input type="checkbox" name="sixties">
+        </label>
+        <label>
+            Skin Type Normal:
+            <input type="checkbox" name="skin_type_normal">
+        </label>
+        <label>
+            Oily:
+            <input type="checkbox" name="oily">
+        </label>
+        <label>
+            Dry:
+            <input type="checkbox" name="dry">
+        </label>
+        <label>
+            Sensitive:
+            <input type="checkbox" name="sensitive">
+        </label>
+        <label>
+            Combination:
+            <input type="checkbox" name="combination">
+        </label>
+        <label>
+            Acne Concerns:
+            <input type="checkbox" name="skin_concerns_acne">
+        </label>
+        <label>
+            Aging:
+            <input type="checkbox" name="aging">
+        </label>
+        <label>
+            Dull Skin:
+            <input type="checkbox" name="dull_skin">
+        </label>
+        <label>
+            Elasticity:
+            <input type="checkbox" name="elasticity">
+        </label>
+        <label>
+            Hydration:
+            <input type="checkbox" name="hydration">
+        </label>
+        <label>
+            Pigmentation:
+            <input type="checkbox" name="pigmentation">
+        </label>
+        <label>
+            Pores:
+            <input type="checkbox" name="pores">
+        </label>
+        <label>
+            Redness:
+            <input type="checkbox" name="redness">
+        </label>
+        <label>
+            Scarring:
+            <input type="checkbox" name="scarring">
+        </label>
+        <label>
+            Sensitive Skin:
+            <input type="checkbox" name="sensitive_skin">
+        </label>
+        <label>
+            Sun Protection:
+            <input type="checkbox" name="sun_protection">
+        </label>
+        <label>
+            Texture:
+            <input type="checkbox" name="texture">
+        </label>
+        <label>
+            Uneven Skin Tone:
+            <input type="checkbox" name="uneven_skin_tone">
+        </label>
+        <label>
+            Body Care:
+            <input type="checkbox" name="body_care">
+        </label>
+        <label>
+            Eye Cream:
+            <input type="checkbox" name="eye_cream">
+        </label>
+        <label>
+            Cleanser:
+            <input type="checkbox" name="cleanser">
+        </label>
+        <label>
+            Exfoliant:
+            <input type="checkbox" name="exfoliant">
+        </label>
+        <label>
+            Microneedling:
+            <input type="checkbox" name="microneedling">
+        </label>
+        <label>
+            Moisturizer:
+            <input type="checkbox" name="moisturizer">
+        </label>
+        <label>
+            Peels:
+            <input type="checkbox" name="peels">
+        </label>
+        <label>
+            Serums:
+            <input type="checkbox" name="serums">
+        </label>
+        <label>
+            Sunscreen:
+            <input type="checkbox" name="sun_screen">
+        </label>
+        <label>
+            Spot Treatment:
+            <input type="checkbox" name="spot_treatment">
+        </label>
+        <label>
+            Toner:
+            <input type="checkbox" name="toner">
+        </label>
+        <label>
+            Use Sunscreen Daily:
+            <input type="checkbox" name="use_sunscreen_daily">
+        </label>
+        <label>
+            React to Sun Exposure:
+            <input type="checkbox" name="react_to_sun_exposure">
+        </label>
+        <label>
+            Hair Loss:
+            <input type="checkbox" name="hair_loss">
+        </label>
+        
+        <button type="submit">Filter</button>
+    </form>
+
+    <p>Total Products: {{ product_count }}</p>
+    <ul>
+
+        <h1>Product List</h1>
+        <table style="border:solid black 10px">
+            <tr>
+                <th>Product Name</th>
+                <th>Brand</th>
+            </tr>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.product_name }}</td>
+                <td>{{ product.brand }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {{product_count}}
+    </ul>
+</body>
+</html> {% endcomment %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&family=Petrona:wght@600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&family=Petrona:wght@800&display=swap"
+      rel="stylesheet"
+    />
+    <title>The Skin Quiz</title>
+    <link rel="stylesheet" href="as.css" />
+  </head>
+  <style>
+    /* Set the background color and font for the body and main elements */
+body,
+main {
+  background-color: #f9f3ee;
+  font-family: "Petrona", serif;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+}
+
+#quiz-container {
+  max-width: 960px;
+  width: 100%;
+  padding: 20px;
+  background-color: #f9f3ee; /* Optional: you can use this if you want a different background for the container */
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* General styles for each question article */
+.question {
+  display: none;
+  width: 100%;
+  text-align: center;
+}
+
+.question h2 {
+  font-size: 2rem;
+  color: #000000;
+  margin-bottom: 20px;
+  font-weight: 600 !important;
+}
+
+.question p {
+  font-size: 16px;
+  color: #727171;
+  margin-bottom: 36px;
+}
+
+.question div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.question div label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #444444;
+  padding: 36px 36px;
+  background-color: #f9f3ee;
+  border-radius: 50%;
+  border: 1px solid #a66464;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s;
+}
+
+.question div label:hover,
+.question div label.selected {
+  background-color: #a66464;
+  color: #ffffff;
+}
+
+/* Hide the checkboxes */
+.question div label input {
+  display: none;
+}
+
+/* Navigation buttons */
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.nav-link {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 700;
+  color: #333333;
+  cursor: pointer;
+  user-select: none;
+  text-align: center;
+  padding: 15px 0;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.nav-link.disabled {
+  opacity: 0.5;
+}
+
+.nav-link:not(.disabled) {
+  opacity: 1;
+}
+
+.nav-link .arrow {
+  font-size: 24px;
+}
+
+/* Specific styles for the submit button */
+.submit-button {
+  display: block;
+  width: fit-content;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 550;
+  color: #ffffff;
+  background-color: #a66464;
+  border: 1px solid #a66464;
+  border-radius: 25px;
+  cursor: pointer;
+  text-align: center;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 45%;
+}
+
+.submit-button:hover {
+  background-color: #fff;
+  color: #a66464;
+}
+
+.continue {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 550;
+  color: #ffffff;
+  background-color: #a66464;
+  border: 1px solid #a66464;
+  border-radius: 25px;
+  cursor: pointer;
+  text-align: center;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.continue:hover {
+  background-color: #fff;
+  color: #a66464;
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+}
+
+.inputs > input {
+  font-size: 16px;
+  border: 1px solid black;
+  border-radius: 25px;
+  padding: 16px 24px;
+  width: 40%;
+}
+
+.inputs > input:hover,
+.inputs > input:active,
+.inputs > input:focus {
+  border: 1px solid black;
+}
+
+.inputs > .agree {
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+
+.email-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 0px;
+}
+
+.email-image img {
+  max-width: 5%;
+  height: auto;
+}
+
+/* Show the first question by default */
+#question1 {
+  display: block;
+}
+
+/* Media Queries for Mobile Screens */
+@media (max-width: 768px) {
+  .question h2 {
+    font-size: 2rem;
+  }
+
+  .question p {
+    font-size: 14px;
+  }
+
+  .question div label {
+    padding: 24px 24px;
+    font-size: 14px;
+  }
+
+  .nav-link {
+    font-size: 14px;
+    padding: 10px 0;
+  }
+
+  .submit-button,
+  .continue {
+    width: 80%;
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  .inputs > input {
+    width: 80%;
+  }
+
+  .email-image img {
+    max-width: 10%;
+  }
+}
+
+/* Media Queries for Laptop Screens */
+@media (min-width: 1024px) {
+  .question h2 {
+    font-size: 3rem;
+  }
+
+  .question p {
+    font-size: 18px;
+  }
+
+  .question div label {
+    padding: 48px 48px;
+    font-size: 18px;
+  }
+
+  .nav-link {
+    font-size: 18px;
+    padding: 20px 0;
+  }
+
+  .submit-button,
+  .continue {
+    width: 30%;
+    padding: 15px 30px;
+    font-size: 18px;
+  }
+
+  .inputs > input {
+    width: 60%;
+  }
+
+  .email-image img {
+    max-width: 4%;
+  }
+}
+
+  </style>
+  <body>
+    <main id="quiz-container">
+        <form method="post" action="{% url 'filter_products' %}">
+            {% csrf_token %}
+      <article class="question" id="question1">
+        <h2>What is your age?</h2>
+        <p>Don't worry, it's but a number.</p>
+        <div>
+          <label>
+            20s
+            <input type="checkbox" name="twenties" />
+          </label>
+          <label>
+            30s
+            <input type="checkbox" name="thirties" />
+          </label>
+          <label>
+            40s
+            <input type="checkbox" name="forties" />
+          </label>
+          <label>
+            50s
+            <input type="checkbox" name="fifties" />
+          </label>
+          <label>
+            60+
+            <input type="checkbox" name="sixties" />
+          </label>
+        </div>
+        <div class="navigation">
+          <span class="nav-link back disabled" id="back-button-1"
+            ><span class="arrow">&larr;</span> Back</span
+          >
+          <span class="nav-link next disabled" id="next-button-1"
+            >Next <span class="arrow">&rarr;</span></span
+          >
+        </div>
+      </article>
+      <article class="question" id="question2" style="display: none">
+        <h2>Tell us about your skin:</h2>
+        <p>Choose up to 2</p>
+        <div>
+          <label>
+            Normal
+            <input type="checkbox" name="skin_type_normal" />
+          </label>
+          <label>
+            Oily
+            <input type="checkbox" name="oily" />
+          </label>
+          <label>
+            Dry
+            <input type="checkbox" name="dry" />
+          </label>
+          <label>
+            Combo
+            <input type="checkbox" name="combination" />
+          </label>
+          <label>
+            Sensitive
+            <input type="checkbox" name="sensitive" />
+          </label>
+          <label>
+            I Don't Know
+            <input type="checkbox" name="skin" value="i_don't_know" />
+          </label>
+        </div>
+        <div class="navigation">
+          <span class="nav-link back" id="back-button-2"
+            ><span class="arrow">&larr;</span> Back</span
+          >
+          <span class="nav-link next disabled" id="next-button-2"
+            >Next <span class="arrow">&rarr;</span></span
+          >
+        </div>
+      </article>
+      <article class="question" id="question3" style="display: none">
+        <h2>What are your top skincare concerns?</h2>
+        <p>Choose 1-3</p>
+        <div>
+          <label>
+            Acne, Blemishes, And Breakouts
+            <input
+              type="checkbox"
+              name="skin_concerns_acne"
+            />
+          </label>
+          <label>
+            Dull Skin
+            <input type="checkbox" name="concerns" value="dull_skin" />
+          </label>
+          <label>
+            Hydration & Skin Barrier Protection
+            <input
+              type="checkbox"
+              name="hydration"
+            />
+          </label>
+          <label>
+            Hyperpigmentation & Dark Spots/Patches
+            <input
+              type="checkbox"
+              name="pigmentation"
+            />
+          </label>
+          <label>
+            Large Pores
+            <input type="checkbox" name="pores" />
+          </label>
+          <label>
+            Firmness/Elasticity
+            <input
+              type="checkbox"
+              name="elasticity"
+            />
+          </label>
+          <label>
+            Redness & Irritation
+            <input
+              type="checkbox"
+              name="redness"
+            />
+          </label>
+          <label>
+            Scarring
+            <input type="checkbox" name="scarring" />
+          </label>
+          <label>
+            Sensitive Skin
+            <input type="checkbox" name="sensitive_skin" />
+          </label>
+          <label>
+            Texture
+            <input type="checkbox" name="texture" />
+          </label>
+          <label>
+            Uneven Skin Tone
+            <input type="checkbox" name="uneven_skin_tone" />
+          </label>
+          <label>
+            Wrinkles & Fine Lines
+            <input
+              type="checkbox"
+              name="wrinkles_&_fine_lines"
+            />
+          </label>
+        </div>
+        <div class="navigation">
+          <span class="nav-link back" id="back-button-3"
+            ><span class="arrow">&larr;</span> Back</span
+          >
+          <span class="nav-link next disabled" id="next-button-3"
+            >Next <span class="arrow">&rarr;</span></span
+          >
+        </div>
+      </article>
+      <article class="question" id="question4" style="display: none">
+        <h2>
+          Do you use any of the following types of skincare
+          products/ingredients?
+        </h2>
+        <p>Check all that apply.</p>
+        <div>
+          <label>
+            Exfoliator
+            <input type="checkbox" name="exfoliator" />
+          </label>
+          <label>
+            Cleanser
+            <input type="checkbox" name="cleanser" />
+          </label>
+          <label>
+            Moisturizer
+            <input type="checkbox" name="moisturizer" />
+          </label>
+          <label>
+            Eye Cream
+            <input type="checkbox" name="eye_cream" />
+          </label>
+          <label>
+            Serum/Treatment Product
+            <input
+              type="checkbox"
+              name="serums"
+            />
+          </label>
+          <label>
+            SPF
+            <input type="checkbox" name="spf" />
+          </label>
+          <label>
+            Hyaluronic Acid
+            <input type="checkbox" name="hyaluronic_acid" />
+          </label>
+          <label>
+            Niacinamide
+            <input type="checkbox" name="niacinamide" />
+          </label>
+          <label>
+            Glycolic
+            <input type="checkbox" name="glycolic" />
+          </label>
+          <label>
+            Retinol Or Retinoid
+            <input
+        
+              value="retinol_or_retinoid"
+            />
+          </label>
+          <label>
+            Vitamin C
+            <input type="checkbox" name="vitamin_c" />
+          </label>
+          <label>
+            Ceramides
+            <input type="checkbox" name="ceramides" />
+          </label>
+          <label>
+            Hydroquinone
+            <input type="checkbox" name="hydroquinone" />
+          </label>
+        </div>
+        <div class="navigation">
+          <span class="nav-link back" id="back-button-4"
+            ><span class="arrow">&larr;</span> Back</span
+          >
+          <span class="nav-link next disabled" id="next-button-4"
+            >Next <span class="arrow">&rarr;</span></span
+          >
+        </div>
+      </article>
+      <article class="question" id="question5" style="display: none">
+        <h2>
+          Are you concerned about discoloration / pigmentation / dark spots?
+        </h2>
+        <div>
+          <label>
+            Yes
+            <input type="checkbox" name="Yes" />
+          </label>
+          <label>
+            No
+            <input type="checkbox" name="No" />
+          </label>
+        </div>
+        <div class="navigation">
+          <span class="nav-link back" id="back-button-5"
+            ><span class="arrow">&larr;</span> Back</span
+          >
+          <span class="nav-link next disabled" id="next-button-5"
+            >Next <span class="arrow">&rarr;</span></span
+          >
+        </div>
+      </article>
+
+      <article class="question" id="question6" style="display: none">
+        <h2>Hold tight, your skin cocktail is coming right up.</h2>
+        <button class="continue" type="submit" id="submit-button-6">Continue</button>
+
+        <div class="navigation">
+          <span class="nav-link back" id="back-button-6"><span class="arrow">&larr;</span> Back</span
+          >
+        </div>
+      </article>
+    </form>
+
+
+    <article class="suggested-product" style="display: none" style="margin-top:1000px">
+    <p style="margin-top:200px">Total Products: {{ product_count }}</p>
+    <ul>
+
+        <h1>Product List</h1>
+        <table style="border:solid black 10px">
+            <tr>
+                <th>Product Name</th>
+                <th>Brand</th>
+            </tr>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.product_name }}</td>
+                <td>{{ product.brand }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {{product_count}}
+    </ul>
+          <div class="navigation">
+            <span class="nav-link back" id="back-button-7"
+              ><span class="arrow">&larr;</span> Back</span
+            >
+          </div>
+        
+      </article>
+    </main>
+    <script src="script.js"></script>
+  </body>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        let currentQuestionIndex = 1;
+        const totalQuestions = 7;
+      
+        const updateNavigationButtons = () => {
+          document.querySelectorAll(".nav-link").forEach((button) => {
+            button.classList.add("disabled");
+          });
+      
+          if (currentQuestionIndex > 1) {
+            document
+              .getElementById(`back-button-${currentQuestionIndex}`)
+              .classList.remove("disabled");
+          }
+      
+          const currentQuestion = document.getElementById(
+            `question${currentQuestionIndex}`
+          );
+          const isChecked = currentQuestion.querySelector(
+            "input[type='checkbox']:checked"
+          );
+      
+          if (isChecked || currentQuestionIndex === totalQuestions) {
+            document
+              .getElementById(`next-button-${currentQuestionIndex}`)
+              .classList.remove("disabled");
+          }
+        };
+      
+        const showQuestion = (index) => {
+          document.querySelectorAll(".question").forEach((question) => {
+            question.style.display = "none";
+          });
+          document.getElementById(`question${index}`).style.display = "block";
+          updateNavigationButtons();
+        };
+      
+        const toggleSelection = (label, checkbox) => {
+          const singleSelectQuestions = [1, 5];
+          const multiSelectQuestions = {
+            2: 2,
+            3: 3,
+            4: Number.POSITIVE_INFINITY, // allows multiple selections
+          };
+      
+          if (singleSelectQuestions.includes(currentQuestionIndex)) {
+            if (!label.classList.contains("selected")) {
+              document
+                .querySelectorAll(`#question${currentQuestionIndex} label`)
+                .forEach((lbl) => {
+                  lbl.classList.remove("selected");
+                  lbl.querySelector("input").checked = false;
+                });
+              label.classList.add("selected");
+              checkbox.checked = true;
+            }
+          } else if (currentQuestionIndex in multiSelectQuestions) {
+            const maxSelections = multiSelectQuestions[currentQuestionIndex];
+            const selectedLabels = document.querySelectorAll(
+              `#question${currentQuestionIndex} label.selected`
+            ).length;
+      
+            if (label.classList.contains("selected")) {
+              label.classList.remove("selected");
+              checkbox.checked = false;
+            } else if (selectedLabels < maxSelections) {
+              label.classList.add("selected");
+              checkbox.checked = true;
+            }
+          }
+          updateNavigationButtons();
+        };
+      
+        document.querySelectorAll(".next").forEach((button) => {
+          button.addEventListener("click", () => {
+            if (!button.classList.contains("disabled")) {
+              currentQuestionIndex++;
+              if (currentQuestionIndex > totalQuestions) {
+                currentQuestionIndex = totalQuestions;
+              }
+              showQuestion(currentQuestionIndex);
+            }
+          });
+        });
+      
+        document.querySelectorAll(".back").forEach((button) => {
+          button.addEventListener("click", () => {
+            if (!button.classList.contains("disabled")) {
+              currentQuestionIndex--;
+              if (currentQuestionIndex < 1) {
+                currentQuestionIndex = 1;
+              }
+              showQuestion(currentQuestionIndex);
+            }
+          });
+        });
+      
+        document.querySelectorAll("input[type='checkbox']").forEach((checkbox) => {
+          const label = checkbox.parentElement;
+          label.addEventListener("click", (e) => {
+            if (e.target.tagName !== "INPUT") {
+              e.preventDefault();
+              toggleSelection(label, checkbox);
+            }
+          });
+        });
+      
+        document.querySelector("button").addEventListener("click", () => {
+          currentQuestionIndex = 7;
+          showQuestion(currentQuestionIndex);
+        });
+      
+        document.querySelector("#submit-button-6").addEventListener("click", (e) => {
+          e.preventDefault();
+          document.querySelectorAll(".question").forEach((question) => {
+            question.style.display = "none";
+          });
+          document.querySelector(".suggested-product").style.display = "block";
+        });
+      
+        showQuestion(currentQuestionIndex);
+      });
+      
+  </script>
+</html>
